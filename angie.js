@@ -28,12 +28,12 @@ db.collection("users").onSnapshot((querySnapshot) => {
     querySnapshot.forEach((doc) => {
         console.log(`${doc.id} => ${doc.data().post}`);
         tablita.innerHTML += `
-        <tr>
-          <th scope="row">${doc.id}</th>
-          <td>${doc.data().post}</td>
-          <td><button class="btn btn-danger" onclick="eliminar('${doc.id}')">Eliminar</button></td>
-          <td><button class="btn btn-warning"onclick="editar('${doc.id}','${doc.data().post}')">Editar</button></td>
-        </tr>`
+        <div class="container mt-5">
+            <div>${doc.displayName}</div>
+            <div>${doc.data().post}</div>
+            <button class="btn btn-danger" onclick="eliminar('${doc.id}')">Eliminar</button>
+            <button class="btn btn-warning"onclick="editar('${doc.id}','${doc.data().post}')">Editar</button>
+        </div>`
     });
 });
 ///// BORRAR DOCUMENTOS
