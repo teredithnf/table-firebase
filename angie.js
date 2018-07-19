@@ -8,22 +8,14 @@ firebase.initializeApp({
 var db = firebase.firestore();
 
 //agregar documentos
-
-function guardar(){
-  let nombre = document.getElementById('nombre').value;
-  let apellido = document.getElementById('apellido').value;
-  let born = document.getElementById('born').value;
-
+const guardar  = () =>{
+  let post = document.getElementById('txtPost').value;
   db.collection("users").add({
-      first: nombre,
-      last: apellido,
-      born: born
+      post: post
   })
   .then(function(docRef) {
       console.log("Document written with ID: ", docRef.id);
-      document.getElementById('nombre').value = '';
-      document.getElementById('apellido').value = '';
-      document.getElementById('born').value = '';
+      document.getElementById('txtPost').value = '';
     })
     .catch(function(error) {
       console.error("Error adding document: ", error);
@@ -38,11 +30,9 @@ db.collection("users").onSnapshot((querySnapshot) => {
         tablita.innerHTML += `
         <tr>
           <th scope="row">${doc.id}</th>
-          <td>${doc.data().first}</td>
-          <td>${doc.data().last}</td>
-          <td>${doc.data().born}</td>
+          <td>${doc.data().post}</td>
           <td><button class="btn btn-danger" onclick="eliminar('${doc.id}')">Eliminar</button></td>
-          <td><button class="btn btn-warning"onclick="editar('${doc.id}','${doc.data().first}', '${doc.data().last}','${doc.data().born}')">Editar</button></td>
+          <td><button class="btn btn-warning"onclick="editar('${doc.id}','${doc.data().post}')">Editar</button></td>
         </tr>`
     });
 });
@@ -56,33 +46,25 @@ function eliminar(id){
 }
 
 ///EDITAR DOCUMENTOS//
-function editar(id, name, last, born){
-  document.getElementById('nombre').value = name;
-  document.getElementById('apellido').value = last;
-  document.getElementById('born').value = born;
+function editar(id, post){
+  document.getElementById('txtPost').value = post;
   let btn = document.getElementById('boton');
   btn.innerHTML = 'Editar';
 
   btn.onclick= function(){
     var washingtonRef = db.collection("users").doc(id);
 
-    let nombre = document.getElementById('nombre').value;
-    let apellido = document.getElementById('apellido').value;
-    let born = document.getElementById('born').value;
+    let post = document.getElementById('txtPost').value;
+    
+    // TODO colocar alerta de confirmacion de actuaizar datos 
 
     return washingtonRef.update({
-      first: nombre,
-      last: apellido,
-      born: born
+      post : post
     })
     .then(()=> {
         console.log("Document successfully updated!");
         btn.innerHTML = "Guardar";
-        document.getElementById('nombre').value = '';
-        document.getElementById('apellido').value = '';
-        document.getElementById('born').value = '';
-
-
+        document.getElementById('txtPost').value = '';
     })
     .catch((error)=> {
         // The document probably doesn't exist.
