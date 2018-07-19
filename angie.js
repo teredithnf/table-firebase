@@ -26,7 +26,7 @@ let tablita = document.getElementById('tablita');
 db.collection("users").onSnapshot((querySnapshot) => {
   tablita.innerHTML='';
     querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${doc.data().first}`);
+        console.log(`${doc.id} => ${doc.data().post}`);
         tablita.innerHTML += `
         <tr>
           <th scope="row">${doc.id}</th>
@@ -37,38 +37,55 @@ db.collection("users").onSnapshot((querySnapshot) => {
     });
 });
 ///// BORRAR DOCUMENTOS
-function eliminar(id){
+function eliminar(id){var r = confirm("Estas seguro de Editar la publicacion");
+if (r == true) {
+  
   db.collection("users").doc(id).delete().then(function() {
-      console.log("Document successfully deleted!");
-  }).catch(function(error) {
-      console.error("Error removing document: ", error);
-  });
+    console.log("Document successfully deleted!");
+}).catch(function(error) {
+    console.error("Error removing document: ", error);
+});
+    
+} else {
+    
+}
+
 }
 
 ///EDITAR DOCUMENTOS//
 function editar(id, post){
   document.getElementById('txtPost').value = post;
-  let btn = document.getElementById('boton');
+  const btn = document.getElementById('boton');
   btn.innerHTML = 'Editar';
 
-  btn.onclick= function(){
+  btn.onclick = function(){
     var washingtonRef = db.collection("users").doc(id);
 
     let post = document.getElementById('txtPost').value;
     
     // TODO colocar alerta de confirmacion de actuaizar datos 
+    
+      //var txt;
+      var r = confirm("Estas seguro de Editar la publicacion");
+      if (r == true) {
+        
+        washingtonRef.update({
+          post : post
+        })
+        .then(()=> {
+            console.log("Document successfully updated!");
+        })
+        .catch((error)=> {
+            // The document probably doesn't exist.
+            console.error("Error updating document: ", error);
+        });
+          
+      } else {
+          
+      }
+      btn.innerHTML = "Guardar";
+      btn.onclick = guardar;
+      document.getElementById('txtPost').value = '';
 
-    return washingtonRef.update({
-      post : post
-    })
-    .then(()=> {
-        console.log("Document successfully updated!");
-        btn.innerHTML = "Guardar";
-        document.getElementById('txtPost').value = '';
-    })
-    .catch((error)=> {
-        // The document probably doesn't exist.
-        console.error("Error updating document: ", error);
-    });
   }
 }
