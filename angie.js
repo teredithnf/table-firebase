@@ -6,8 +6,6 @@ firebase.initializeApp({
 
 // Initialize Cloud Firestore through Firebase
 var db = firebase.firestore();
-
-//agregar documentos
 const guardar  = () =>{
   let post = document.getElementById('txtPost').value;
   db.collection("users").add({
@@ -89,3 +87,5 @@ function editar(id, post){
 
   }
 }
+
+//agregar documentos
